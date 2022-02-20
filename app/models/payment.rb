@@ -15,6 +15,8 @@ class Payment < ApplicationRecord
   validates :order, uniqueness: true
   validate :amount_matches_order
   
+  after_initialize :set_default_values
+  
   enum payment_type: %i[cash card]
 
   belongs_to :order
@@ -26,5 +28,9 @@ class Payment < ApplicationRecord
     unless order_total == self.amount
       self.errors.add :amount, "does not match order's total price"
     end
+  end
+  
+  def set_default_values
+    self.payment_type ||= 0
   end
 end
