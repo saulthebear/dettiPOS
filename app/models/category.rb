@@ -11,7 +11,7 @@
 class Category < ApplicationRecord
   validates :name, presence: true, uniqueness: true
 
-  blongs_to :parent,
+  belongs_to :parent,
     class_name: :Category,
     foreign_key: :parent_id,
     inverse_of: :subcategories,
