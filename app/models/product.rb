@@ -13,12 +13,22 @@
 class Product < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :price, numericality: true
-  
+
   belongs_to :category
-  
+
   has_many :order_items
 
   has_many :orders,
-    through: :order_items,
-    inverse_of: :products
+           through: :order_items,
+           inverse_of: :products
+
+  def self.by_category_id
+    products = all
+
+    hash = Hash.new { |h, k| h[k] = [] }
+
+    products.each { |product| hash[product.category_id] << product }
+
+    hash
+  end
 end

@@ -1,0 +1,21 @@
+<li>
+  <%= category.name %>
+  <% if subcategories %>
+    <ul>
+      <% subcategories.each do |subcategory|%>
+        <%= render "category", category: subcategory,
+          subcategories: categories_by_parent_id[subcategory.id],
+          categories_by_parent_id: categories_by_parent_id,
+          products_by_category_id: @products_by_category_id
+        %>
+      <% end %>
+    </ul>
+  <% end %>
+  
+  <ul>
+    <% products_by_category_id[category.id].each do |product| %>
+      <li><%= product.name %></li>
+    <% end %>
+  </ul>
+  
+</li>

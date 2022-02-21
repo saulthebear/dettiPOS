@@ -26,4 +26,15 @@ class Category < ApplicationRecord
   has_many :products,
     inverse_of: :category,
     dependent: :destroy
+    
+  def self.by_parent_id
+    categories = all
+
+    hash = Hash.new { |h, k| h[k] = [] }
+
+    categories.each do |category|
+      hash[category.parent_id].append(category)
+    end
+    hash
+  end
 end

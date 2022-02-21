@@ -1,0 +1,11 @@
+<ul>
+  <% root_categories = @categories_by_parent_id[nil] %>
+  
+  <% root_categories.each do |category| %>
+    <%= render "category", category: category,
+      subcategories: @categories_by_parent_id[category.id],
+      categories_by_parent_id: @categories_by_parent_id,
+      products_by_category_id: @products_by_category_id
+    %>
+  <% end %>
+</ul>
