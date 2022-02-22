@@ -24,19 +24,15 @@
   <div class="col p-0 sv-order-panel">
 
     <div class="p-4 d-flex flex-column justify-content-between h-100">
-
-      <div class="line-items">
+    
+      <div>
         <div class="row">
           <div class="col-6 sv-line-item-header">Item</div>
           <div class="col-2 sv-line-item-header">Qty</div>
           <div class="col-2 sv-line-item-header">Each</div>
           <div class="col-2 sv-line-item-header">Total</div>
         </div>
-
-        <% 3.times do |index| %>
-          <% unit_price = 12.25 + index %>
-          <%= render "line_item", name: "Item #{index + 1}", notes: nil, quantity: 2 + index, unit_price: unit_price %>
-        <% end %>
+        <div class="line-items"></div>
       </div>
 
       <div class="row sv-order-summary mt-2">
