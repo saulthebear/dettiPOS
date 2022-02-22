@@ -13,5 +13,38 @@
  *= require_tree .
  *= require_self
  */
+@import "./bootstrap_custom.scss";
 
 @import "bootstrap";
+
+.sv-order-panel {
+  min-height: 90vh;
+}
+
+.sv-line-item {
+  border-bottom: 2px solid $primary;
+  padding-block: 1rem;
+}
+
+.sv-line-item-header {
+  position: relative;
+  &::after {
+    content: "";
+
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 90%;
+
+    border-bottom: 2px solid $primary;
+  }
+}
+
+.sv-order-summary {
+  border-top: 1px solid $gray-300;
+
+  &__items {
+    border-right: 1px solid $gray-300;
+  }
+}

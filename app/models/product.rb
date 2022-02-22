@@ -31,4 +31,18 @@ class Product < ApplicationRecord
 
     hash
   end
+
+  # If calling this method on multiple products, category map can be created by
+  # caller first to prevent loading categories multiple times
+  def all_ancestor_category_ids(category_map = Category.all.map { |category| [category.id, category] }.to_h)
+    current_category_id = category_id
+    ancestor_ids = []
+
+    until current_category_id.nil?
+      ancestor_ids << current_category_id
+      current_category_id = category_map[current_category_id].parent_id
+    end
+
+    ancestor_ids
+  end
 end

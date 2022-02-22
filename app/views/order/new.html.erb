@@ -1,7 +1,67 @@
-<h1>Order#new</h1>
-<p>Find me in app/views/order/new.html.erb</p>
+<div class="row h-100">
+  <div class="col-7 bg-dark text-light p-0 pt-5">
+    <div class="container pt-4">
+      <div class="row row-cols-4">
+        <% root_categories = @categories_by_parent_id[nil] %>
+  
+        <%# root_categories.each do |category| %>
+          <%#= render "category", category: category,
+            subcategories: @categories_by_parent_id[category.id],
+            categories_by_parent_id: @categories_by_parent_id,
+            products_by_category_id: @products_by_category_id
+          %>
 
-<%= render "products",
-  categories_by_id: @categories_by_id,
-  products_by_category_id: @products_by_category_id
-%>
+          <%#= render 'category_button', category: category %>
+
+
+          
+        <%# end %>
+        <% 4.times do |index| %>
+          <%= render "category_button", name: "Category #{index}" %>
+        <% end %>
+        <% 10.times do |index| %>
+          <%= render "product_button", name: "Item #{index + 1}", price: "10.50"%>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-5 p-0 sv-order-panel pt-5">
+
+    <div class="p-4 d-flex flex-column justify-content-between h-100">
+
+      <div class="line-items">
+        <div class="row">
+          <div class="col-6 sv-line-item-header">Item</div>
+          <div class="col-2 sv-line-item-header">Qty</div>
+          <div class="col-2 sv-line-item-header">Each</div>
+          <div class="col-2 sv-line-item-header">Total</div>
+        </div>
+
+        <% 3.times do |index| %>
+          <% unit_price = 12.25 + index %>
+          <%= render "line_item", name: "Item #{index + 1}", notes: nil, quantity: 2 + index, unit_price: unit_price %>
+        <% end %>
+      </div>
+
+      <div class="row sv-order-summary mt-2">
+        <div class="col-6 d-flex justify-content-between py-4 sv-order-summary__items">
+          <span class="text-muted">Items</span>
+          <span class="fw-bold">3</span>
+        </div>
+        <div class="col-6 d-flex justify-content-between py-4">
+          <span class="text-muted">TOTAL</span>
+          <span class="fw-bold">R34.50</span>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between mt-4">
+          <button class="btn btn-danger">Cancel</button>
+          <button class="btn btn-lg btn-success">PAY</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  
+</div>
