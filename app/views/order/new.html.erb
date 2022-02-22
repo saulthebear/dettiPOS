@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'order', defer: "defer" %>
 
 <div class="row h-100">
-  <div class="col-7 bg-dark text-light p-0 pt-5">
+  <div class="col-7 bg-dark text-light p-0">
     <div class="container pt-4">
       <% @categories_by_levels.each do |level, categories| %>
         <%= render 'category_row', categories: categories %>
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="col-5 p-0 sv-order-panel pt-5">
+  <div class="col p-0 sv-order-panel">
 
     <div class="p-4 d-flex flex-column justify-content-between h-100">
 
@@ -45,7 +45,7 @@
 
         <div class="col-12 d-flex justify-content-between mt-4">
           <button class="btn btn-danger">Cancel</button>
-          <button class="btn btn-lg btn-success">PAY</button>
+          <button class="btn btn-lg btn-success fw-bold w-50">PAY</button>
         </div>
       </div>
 
