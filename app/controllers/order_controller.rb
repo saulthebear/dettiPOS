@@ -1,7 +1,7 @@
 class OrderController < ApplicationController
   def new
-    @categories_by_parent_id = Category.by_parent_id
-    @products_by_category_id = Product.by_category_id
+    @categories_by_levels = Category.by_levels
+    @products = Product.all
   end
 
   def create
