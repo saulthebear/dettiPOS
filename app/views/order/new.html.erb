@@ -4,12 +4,18 @@
   <div class="col-7 bg-dark text-light p-0">
     <div class="container pt-4">
       <% @categories_by_levels.each do |level, categories| %>
-        <%= render 'category_row', categories: categories %>
+        <%= render 'category_row',
+          categories: categories,
+          level: level
+        %>
       <% end %>
 
       <div class="row row-cols-4">
-        <% @products.each do |product| %>
-          <%= render "product_button", product: product%>
+        <% @products_with_ancestors.each do |product, ancestor_list| %>
+          <%= render "product_button",
+            product: product,
+            ancestors: ancestor_list
+          %>
         <% end %>
       </div>
     </div>

@@ -1,5 +1,8 @@
-<div class="col mb-3">
-  <button class="btn btn-light w-100 text-start h-100">
+<div class="col mb-3 sv-product-container">
+  <button class="btn btn-light w-100 text-start h-100 js-product"
+    data-product-id="<%= product.id%>"
+    data-ancestors="<%= ancestors %>"
+  >
     <h4><%= product.name %></h3>
     <span>R <%= product.price %></span>
   </button>
