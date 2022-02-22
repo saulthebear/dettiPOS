@@ -10,13 +10,15 @@ function addClickListener(collection, callback) {
 }
 
 function deactivateAllCategories() {
-  getCategories().forEach((category) =>
-    category.classList.remove("js-active-category")
-  );
+  getCategories().forEach((category) => {
+    category.classList.remove("js-active-category", "btn-primary");
+    category.classList.add("btn-outline-primary");
+  });
 }
 
 function setActiveCategory(category) {
-  category.classList.add("js-active-category");
+  category.classList.add("js-active-category", "btn-primary");
+  category.classList.remove("btn-outline-primary");
 }
 
 function getActiveCategory() {
@@ -73,6 +75,13 @@ function setActiveProducts() {
 
 function handleCategoryClick(event) {
   const category = event.currentTarget;
+
+  // Toggle off if already selected
+  if (getActiveCategory() === category) {
+    deactivateAllCategories();
+    setActiveProducts();
+    return;
+  }
 
   deactivateAllCategories();
   setActiveCategory(category);
