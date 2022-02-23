@@ -54,6 +54,14 @@ class Category < ApplicationRecord
     hash
   end
 
+  def self.with_ancestors
+    category_map = self.category_map
+
+    all.map do |category|
+      [category, category.all_ancestor_ids(category_map)]
+    end
+  end
+
   def self.by_levels
     all_levels = Hash.new { |h, k| h[k] = [] }
 
@@ -65,8 +73,20 @@ class Category < ApplicationRecord
     all_levels
   end
 
+  def self.with_ancestors_by_levels
+    category_map = self.category_map
+    all_levels = Hash.new { |h, k| h[k] = [] }
+
+    ancestor_map.each do |category, ancestors|
+      number_of_levels = ancestors.length
+      all_levels[number_of_levels] << [category, category.all_ancestor_ids(category_map)]
+    end
+
+    all_levels
+  end
+
   def all_ancestor_ids(category_map)
-    current_id = id
+    current_id = category_map[id].parent_id
     ancestor_ids = []
 
     until current_id.nil?

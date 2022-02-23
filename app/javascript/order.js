@@ -22,6 +22,8 @@ class OrderPage {
 
   initialize() {
     this.products.setActiveStateForAll(Categories.getActiveId());
+    this.categories.hideAllSubcategories();
+
     this.addClickListener(this.categories.all, this.handleCategoryClick);
     this.addClickListener(this.products.all, this.handleProductClick);
     this.render();
@@ -229,11 +231,53 @@ class Categories {
       category.classList.remove("js-active-category", "btn-primary");
       category.classList.add("btn-outline-primary");
     });
+
+    this.hideAllSubcategories();
+  }
+
+  hideAllSubcategories() {
+    console.log("hiding all subs");
+    const subcategories = this.getSubcategories();
+
+    subcategories.forEach((category) => {
+      category.parentElement.classList.add("d-none");
+    });
+  }
+
+  showCategories(categories) {
+    categories.forEach((category) =>
+      category.parentElement.classList.remove("d-none")
+    );
+  }
+
+  /**
+   * Get all non-root categories
+   */
+  getSubcategories() {
+    const subcategories = [];
+
+    this.all.forEach((category) => {
+      const ancestors = JSON.parse(category.dataset.ancestors);
+      if (ancestors.length > 0) subcategories.push(category);
+    });
+
+    return subcategories;
   }
 
   activate(category) {
     category.classList.add("js-active-category", "btn-primary");
     category.classList.remove("btn-outline-primary");
+
+    const categoryId = parseInt(category.dataset.categoryId);
+    const subcategories = this.find_by_ancestor_id(categoryId);
+
+    const parentId = JSON.parse(category.dataset.ancestors)[0];
+    const siblings = this.find_by_ancestor_id(parentId);
+
+    const subcategoriesAndSiblings = subcategories.concat(siblings);
+
+    this.showCategories(subcategoriesAndSiblings);
+
     return this;
   }
 
@@ -264,6 +308,24 @@ class Categories {
 
     products.deactivateAll();
     products.setActiveStateForAll(Categories.getActive());
+  }
+
+  find_by_ancestor_id(ancestor_id) {
+    const matches = [];
+
+    this.all.forEach((category) => {
+      const ancestors = JSON.parse(category.dataset.ancestors);
+
+      if (!ancestor_id && ancestors.length === 0) {
+        // Root categories
+        matches.push(category);
+      } else if (ancestors.includes(ancestor_id)) {
+        // Subcategories
+        matches.push(category);
+      }
+    });
+
+    return matches;
   }
 }
 

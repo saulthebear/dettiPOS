@@ -1,16 +1,12 @@
 class OrderController < ApplicationController
   def new
-    @categories_by_levels = Category.by_levels
+    # @categories_by_levels = Category.by_levels
+    @categories = Category.with_ancestors_by_levels
 
-    @products = Product.all
+    # puts @category_ancestor_map
 
-    category_map = Category.all.map { |category| [category.id, category] }.to_h
-
-    @category_ancestor_map = Category.ancestor_map
-
-    @products_with_ancestors = @products.map do |product|
-      [product, product.all_ancestor_category_ids(category_map)]
-    end
+    @products_with_ancestors = Product.with_ancestors
+    # @categories_with_ancestors = Category.with_ancestors
 
     render :new
   end

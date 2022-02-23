@@ -1,7 +1,8 @@
 <div class="row row-cols-3">
-  <% categories.each do |category| %>
+  <% categories.each do |category, ancestors| %>
     <%=render 'category_button',
       category: category,
+      ancestors: ancestors,
       level: level
     %>
   <% end %>

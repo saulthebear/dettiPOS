@@ -3,7 +3,7 @@
 <div class="row h-100">
   <div class="col-7 bg-dark text-light p-0">
     <div class="container pt-4">
-      <% @categories_by_levels.each do |level, categories| %>
+      <% @categories.each do |level, categories| %>
         <%= render 'category_row',
           categories: categories,
           level: level
@@ -42,7 +42,7 @@
         </div>
         <div class="col-6 d-flex justify-content-between py-4">
           <span class="text-muted">TOTAL</span>
-          <span class="fw-bold js-order-total">R 0,00</span>
+          <span class="fw-bold js-order-total"><%= number_to_currency(0) %></span>
         </div>
 
         <div class="col-12 d-flex justify-content-between mt-4">
