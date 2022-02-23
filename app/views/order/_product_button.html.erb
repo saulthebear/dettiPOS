@@ -6,6 +6,6 @@
     data-product-price="<%= product.price %>"
   >
     <h4><%= product.name %></h3>
-    <span>R <%= product.price %></span>
+    <span><%= number_to_currency(product.price) %></span>
   </button>
 </div>

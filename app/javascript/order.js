@@ -1,4 +1,11 @@
 class OrderPage {
+  static getFormatter() {
+    return new Intl.NumberFormat("en-ZA", {
+      style: "currency",
+      currency: "ZAR",
+    });
+  }
+
   constructor() {
     this.lineItems = new LineItemsCollection();
 
@@ -121,6 +128,10 @@ class LineItem {
   }
 
   toHtml() {
+    const formattedUnitPrice = OrderPage.getFormatter().format(this.unitPrice);
+    const formattedTotalPrice = OrderPage.getFormatter().format(
+      this.getTotalPrice()
+    );
     return `
     <div class="row sv-line-item pt-3">
       <div class="col-6">
@@ -133,11 +144,11 @@ class LineItem {
       </div>
 
       <div class="col-2">
-        <span class="sv-line-item__unit-price">R${this.unitPrice}</span> 
+        <span class="sv-line-item__unit-price">${formattedUnitPrice}</span> 
       </div>
 
       <div class="col-2">
-        <span class="fw-bold">R${this.getTotalPrice()}</span> 
+        <span class="fw-bold">${formattedTotalPrice}</span> 
       </div>
     </div>`.trim();
   }
@@ -200,7 +211,10 @@ class LineItemsCollection {
       elements.forEach((element) => container.appendChild(element));
     });
 
-    totalPriceElement.innerText = this.getTotalPrice();
+    const formattedTotalPrice = OrderPage.getFormatter().format(
+      this.getTotalPrice()
+    );
+    totalPriceElement.innerText = formattedTotalPrice;
     orderCountElement.innerText = this.getItemCount();
   }
 }
@@ -301,13 +315,3 @@ class Products {
 
 const orderPage = new OrderPage();
 orderPage.initialize();
-// orderPage.products.setActiveStateForAll();
-// orderPage.addClickListener(
-//   orderPage.categories.all,
-//   orderPage.handleCategoryClick
-// );
-// orderPage.addClickListener(
-//   orderPage.products.all,
-//   orderPage.handleProductClick
-// );
-// orderPage.lineItems.render(orderPage.lineItemsContainer);
