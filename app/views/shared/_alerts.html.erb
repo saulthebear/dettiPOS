@@ -1,0 +1,23 @@
+<% if flash[:errors] || flash[:alerts] %>
+  <div class="sv-alerts-container position-absolute top-0 start-50">
+
+  <% if flash[:errors] %>
+    <% flash[:errors].each do |error| %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="toast-body"><%= error %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% if flash[:alerts] %>
+    <% flash[:alerts].each do |alert| %>
+      <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <div class="toast-body"><%= alert %></div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    <% end %>
+  <% end %>
+    
+  </div>
+<% end %>

@@ -1,7 +1,6 @@
 class OrdersController < ApplicationController
   def new
     @categories = Category.with_ancestors_by_levels
-
     @products_with_ancestors = Product.with_ancestors
 
     render :new
@@ -17,11 +16,11 @@ class OrdersController < ApplicationController
     order.order_items = items
 
     if order.save
-      flash.now[:alerts] = ['Order placed successfully!']
+      flash[:alerts] = ['Order placed successfully!']
       redirect_to new_order_url
     else
-      flash.now[:errors] = order.errors.full_messages
-      render :new
+      flash[:errors] = order.errors.full_messages
+      redirect_to new_order_url
     end
   end
 

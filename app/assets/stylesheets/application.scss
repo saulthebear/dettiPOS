@@ -49,3 +49,7 @@
     border-right: 1px solid $gray-300;
   }
 }
+
+.sv-alerts-container {
+  z-index: $zindex-popover;
+}
