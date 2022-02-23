@@ -26,6 +26,11 @@ class OrderPage {
 
     this.addClickListener(this.categories.all, this.handleCategoryClick);
     this.addClickListener(this.products.all, this.handleProductClick);
+
+    document
+      .querySelector(".js-cancel-order")
+      .addEventListener("click", this.cancelOrder);
+
     this.render();
   }
 
@@ -71,6 +76,11 @@ class OrderPage {
 
     const item = new LineItem(id, name, 1, price);
     orderPage.lineItems.addItem(item);
+    orderPage.render();
+  }
+
+  cancelOrder() {
+    orderPage.lineItems = new LineItemsCollection();
     orderPage.render();
   }
 }
