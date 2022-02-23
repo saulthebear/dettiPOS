@@ -47,7 +47,7 @@
 
         <div class="col-12 d-flex justify-content-between mt-4">
           <button class="btn btn-danger js-cancel-order">Cancel</button>
-          <button class="btn btn-lg btn-success fw-bold w-50">PAY</button>
+          <button class="btn btn-lg btn-success fw-bold w-50 js-submit-order">PAY</button>
         </div>
       </div>
 
@@ -55,4 +55,10 @@
 
   </div>
   
+  <%= form_with url: orders_url,
+    id: 'js-order-form',
+    data: { turbo: false } do |form| %>
+    <%# <%= form.hidden_field "order[items][][product_id]", value: 1 %>
+    <%# <%= form.hidden_field "order[items][][quantity]", value: 1 %> %>
+  <% end %>
 </div>

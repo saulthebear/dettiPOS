@@ -31,6 +31,10 @@ class OrderPage {
       .querySelector(".js-cancel-order")
       .addEventListener("click", this.cancelOrder);
 
+    document
+      .querySelector(".js-submit-order")
+      .addEventListener("click", this.submitOrder);
+
     this.render();
   }
 
@@ -82,6 +86,29 @@ class OrderPage {
   cancelOrder() {
     orderPage.lineItems = new LineItemsCollection();
     orderPage.render();
+  }
+
+  createFormFields(form) {
+    this.lineItems.getList().forEach((lineItem) => {
+      const id_input = document.createElement("input");
+      const quantity_input = document.createElement("input");
+
+      id_input.type = "hidden";
+      id_input.name = "order[items][][product_id]";
+      id_input.value = lineItem.id;
+      quantity_input.type = "hidden";
+      quantity_input.name = "order[items][][quantity]";
+      quantity_input.value = lineItem.quantity;
+
+      form.appendChild(id_input);
+      form.appendChild(quantity_input);
+    });
+  }
+
+  submitOrder() {
+    const form = document.getElementById("js-order-form");
+    orderPage.createFormFields(form);
+    form.submit();
   }
 }
 
@@ -246,7 +273,6 @@ class Categories {
   }
 
   hideAllSubcategories() {
-    console.log("hiding all subs");
     const subcategories = this.getSubcategories();
 
     subcategories.forEach((category) => {
