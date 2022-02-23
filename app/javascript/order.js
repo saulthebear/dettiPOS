@@ -1,7 +1,11 @@
 class OrderPage {
   constructor() {
     this.lineItems = new LineItemsCollection();
+
     this.lineItemsContainer = document.querySelector(".line-items");
+    this.totalPriceElement = document.querySelector(".js-order-total");
+    this.orderCountElement = document.querySelector(".js-order-count");
+
     const categoryElements = document.querySelectorAll(".js-category");
     const productElements = document.querySelectorAll(".js-product");
 
@@ -26,7 +30,11 @@ class OrderPage {
   }
 
   render() {
-    this.lineItems.render(this.lineItemsContainer);
+    this.lineItems.render(
+      this.lineItemsContainer,
+      this.totalPriceElement,
+      this.orderCountElement
+    );
   }
 
   handleCategoryClick(event) {
@@ -34,7 +42,6 @@ class OrderPage {
 
     // Toggle: deactivate if already active
     if (Categories.getActive() === category) {
-      console.log("reseting categories");
       orderPage.categories.deactivateAll();
       orderPage.products.setActiveStateForAll(Categories.getActiveId());
       return;
@@ -54,7 +61,6 @@ class OrderPage {
     const price = parseFloat(product.dataset.productPrice);
 
     const item = new LineItem(id, name, 1, price);
-    console.log(item);
     orderPage.lineItems.addItem(item);
     orderPage.render();
   }
@@ -110,9 +116,11 @@ class LineItem {
     return this;
   }
 
-  toHtml() {
-    const total_price = this.quantity * this.unitPrice;
+  getTotalPrice() {
+    return this.quantity * this.unitPrice;
+  }
 
+  toHtml() {
     return `
     <div class="row sv-line-item pt-3">
       <div class="col-6">
@@ -129,7 +137,7 @@ class LineItem {
       </div>
 
       <div class="col-2">
-        <span class="fw-bold">R${total_price}</span> 
+        <span class="fw-bold">R${this.getTotalPrice()}</span> 
       </div>
     </div>`.trim();
   }
@@ -170,12 +178,30 @@ class LineItemsCollection {
     return Array.from(this.lineItems.values());
   }
 
-  render(container) {
+  getTotalPrice() {
+    const total = this.getList().reduce(
+      (total, lineItem) => total + lineItem.getTotalPrice(),
+      0
+    );
+    return total;
+  }
+
+  getItemCount() {
+    return this.getList().reduce(
+      (count, lineItem) => count + lineItem.quantity,
+      0
+    );
+  }
+
+  render(container, totalPriceElement, orderCountElement) {
     container.innerHTML = "";
     this.getList().forEach((item) => {
       const elements = item.toElements();
       elements.forEach((element) => container.appendChild(element));
     });
+
+    totalPriceElement.innerText = this.getTotalPrice();
+    orderCountElement.innerText = this.getItemCount();
   }
 }
 
@@ -257,7 +283,6 @@ class Products {
   setActiveStateForAll(activeCategoryId) {
     // If no category is selected, all products are set to active
     if (!activeCategoryId) {
-      console.log("setting all products as active");
       this.activateAll();
       return;
     }
