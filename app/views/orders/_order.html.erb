@@ -1,0 +1,6 @@
+<tr>
+  <th scope="row"><%= order.id %></th>
+  <td><%= number_to_currency(order.total_price) %></td>
+  <td><%= time_ago_in_words(order.created_at) %> ago</td>
+  <td><%= link_to 'View', order_url(order), class: "btn btn-primary text-white" %></td>
+</tr>

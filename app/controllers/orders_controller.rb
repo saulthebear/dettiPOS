@@ -28,6 +28,10 @@ class OrdersController < ApplicationController
     end
   end
 
+  def index
+    @orders = Order.order('created_at DESC').includes(:order_items, :products).all
+  end
+
   private
 
   def order_params
