@@ -10,7 +10,8 @@ class ProductsController < ApplicationController
 
   # GET /products/new
   def new
-    @product = Product.new
+    @product = Product.new(price: 0)
+    @categories_by_parent_id = Category.by_parent_id
   end
 
   # GET /products/1/edit

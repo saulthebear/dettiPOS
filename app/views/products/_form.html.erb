@@ -23,12 +23,17 @@
 
   <div class="mb-3">
     <%= form.label :price, class: "form-label" %>
-    <%= form.number_field :price,
-      in: 0.0..500.0,
-      step: 0.5,
-      class: "form-control"
-    %>
+    <div class="input-group">
+      <span class="input-group-text">R</span>
+      <%= form.number_field :price,
+        in: 0.0..500.0,
+        step: 0.5,
+        class: "form-control",
+        value: number_with_precision(product.price, precision: 2)
+      %>
+    </div>
   </div>
+  
   
   <div class="mb-3">
     <%= form.label :category_id %>

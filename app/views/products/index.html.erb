@@ -1,4 +1,8 @@
-<p style="color: green"><%= notice %></p>
+<% if notice %>
+  <div class="alert alert-success mt-3">
+    <%= notice %>
+  </div>
+<% end %>
 
 <h1>Products</h1>
 
