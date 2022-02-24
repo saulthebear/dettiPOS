@@ -2,12 +2,12 @@
 #
 # Table name: payments
 #
-#  id            :bigint           not null, primary key
-#  payments_type :integer          default(0), not null
-#  amount        :decimal(, )      not null
-#  order_id      :bigint           not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id           :bigint           not null, primary key
+#  payment_type :integer          default("cash"), not null
+#  amount       :decimal(, )      not null
+#  order_id     :bigint           not null
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
 #
 class Payment < ApplicationRecord
   validates :payment_type, presence: true
