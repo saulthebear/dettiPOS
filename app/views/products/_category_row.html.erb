@@ -1,22 +1,39 @@
 <% products = products_by_category_id[category.id] %>
 <% subcategories = categories_by_parent_id[category.id] %>
 
-<div class="row">
-  
-  <div class="col-12"><h2><%= category.name %></h2></div>
 
-  <% if products %>
-    <% products.each do |product| %>
-      <%= render 'product', product: product %>
-    <% end %>
-  <% end %>
+<div class="accordion-item">
+    <h2 class="accordion-header" id="category-heading-<%= category.id %>">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#category-accordion-<%= category.id %>" aria-expanded="true" aria-controls="category-accordion-<%= category.id %>">
+        <%= category.name %>
+      </button>
+    </h2>
+    <div id="category-accordion-<%= category.id %>" class="accorion-collapse collapse" aria-labelledby="category-heading-<%= category.id %>" data-bs-parent="subcategory-accordion-<%= category.parent_id %>">
+      
+      <div class="accorion-body p-3">
+        <% if products %>
+          <div class="row row-cols-2">
+            <% products.each do |product| %>
+              <%= render 'product', product: product %>
+            <% end %>
+          </div>
+          
+        <% end %>
 
-  <% subcategories.each do |subcategory| %>
-    <%= render 'category_row',
-      category: subcategory,
-      categories_by_parent_id: @categories_by_parent_id,
-      products_by_category_id: @products_by_category_id
-    %>
-  <% end %>
-
+        <% if subcategories %>
+          <div class="accordian" id="subcategory-accordion-<%= category.id %>">
+            <% subcategories.each do |subcategory| %>
+              <%= render 'category_row',
+                category: subcategory,
+                categories_by_parent_id: @categories_by_parent_id,
+                products_by_category_id: @products_by_category_id
+              %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      
+    </div>
 </div>
+
+ 

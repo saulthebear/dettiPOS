@@ -6,10 +6,26 @@
 
 <% root_categories = @categories_by_parent_id[nil] %>
 
-<% root_categories.each do |category| %>
-  <%= render 'category_row',
-    category: category,
-    categories_by_parent_id: @categories_by_parent_id,
-    products_by_category_id: @products_by_category_id
-  %>
-<% end %>
+
+<div class="accorion open" id="root-accordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="root-heading">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#rootCollapse" aria-expanded="true" aria-controls="rootCollapse">
+        Categories
+      </button>
+    </h2>
+
+    <div id="rootCollapse" class="accorion-collapse collapse show" aria-labelledby="root-heading" data-bs-parent="root-accordion">
+      <div class="accordion-body">
+        <% root_categories.each do |category| %>
+          <%= render 'category_row',
+            category: category,
+            categories_by_parent_id: @categories_by_parent_id,
+            products_by_category_id: @products_by_category_id
+          %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  
+</div>
