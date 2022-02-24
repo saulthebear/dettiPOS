@@ -23,7 +23,7 @@ class Product < ApplicationRecord
            inverse_of: :products
 
   def self.by_category_id
-    products = all
+    products = includes(:category).all
 
     hash = Hash.new { |h, k| h[k] = [] }
 

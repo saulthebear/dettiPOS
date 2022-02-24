@@ -4,6 +4,8 @@ class ProductsController < ApplicationController
   # GET /products or /products.json
   def index
     @products = Product.includes(:category).all
+    @categories_by_parent_id = Category.by_parent_id
+    @products_by_category_id = Product.by_category_id
   end
 
   # GET /products/new
