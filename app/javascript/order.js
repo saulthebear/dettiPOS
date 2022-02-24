@@ -1,8 +1,18 @@
 class OrderPage {
-  static getFormatter() {
+  static getCurrencyFormatter() {
     return new Intl.NumberFormat("en-ZA", {
       style: "currency",
       currency: "ZAR",
+    });
+  }
+
+  /**
+   * Still used for currency, but doesn't include the "R"
+   */
+  static getNumberFormatter() {
+    return new Intl.NumberFormat("en-ZA", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     });
   }
 
@@ -35,6 +45,10 @@ class OrderPage {
       .querySelector(".js-submit-order")
       .addEventListener("click", this.submitOrder);
 
+    document
+      .getElementById("payment-amount-payed")
+      .addEventListener("input", this.handleAmountPayedInput);
+
     this.render();
   }
 
@@ -51,7 +65,8 @@ class OrderPage {
     this.lineItems.render(
       this.lineItemsContainer,
       this.totalPriceElement,
-      this.orderCountElement
+      this.orderCountElement,
+      document.getElementById("payment-total")
     );
   }
 
@@ -88,6 +103,35 @@ class OrderPage {
     orderPage.render();
   }
 
+  getPaymentType() {
+    const paymentForm = document.getElementById("payment-form");
+    const formData = new FormData(paymentForm);
+    return formData.get("payment[payment-type]");
+  }
+
+  handleAmountPayedInput(event) {
+    const amountPayedString = event.currentTarget.value;
+    const amountPayedStringFixed = amountPayedString.replace(",", ".");
+    const amountPayed = parseFloat(amountPayedStringFixed);
+
+    const orderTotal = orderPage.lineItems.getTotalPrice();
+    const difference = amountPayed - orderTotal;
+
+    orderPage.renderPaymentChange(difference);
+  }
+
+  renderPaymentChange(changeAmount) {
+    const element = document.getElementById("payment-change");
+    const formattedChangeAmount =
+      OrderPage.getNumberFormatter().format(changeAmount);
+    element.value = formattedChangeAmount;
+  }
+
+  // renderPaymentTotal(total) {
+  //   const element = document.getElementById("payment-total");
+  //   element.value = total;
+  // }
+
   createFormFields(form) {
     this.lineItems.getList().forEach((lineItem) => {
       const id_input = document.createElement("input");
@@ -103,12 +147,23 @@ class OrderPage {
       form.appendChild(id_input);
       form.appendChild(quantity_input);
     });
+
+    const paymentTypeInput = document.createElement("input");
+    paymentTypeInput.type = "hidden";
+    paymentTypeInput.name = "order[payment][payment_type]";
+    paymentTypeInput.value = this.getPaymentType();
+    form.appendChild(paymentTypeInput);
   }
 
-  submitOrder() {
-    const form = document.getElementById("js-order-form");
-    orderPage.createFormFields(form);
-    form.submit();
+  submitOrder(event) {
+    event.preventDefault();
+    const paymentForm = document.getElementById("payment-form");
+    if (!paymentForm.reportValidity()) return;
+
+    const orderForm = document.getElementById("js-order-form");
+    orderPage.createFormFields(orderForm);
+
+    orderForm.submit();
   }
 }
 
@@ -167,8 +222,10 @@ class LineItem {
   }
 
   toHtml() {
-    const formattedUnitPrice = OrderPage.getFormatter().format(this.unitPrice);
-    const formattedTotalPrice = OrderPage.getFormatter().format(
+    const formattedUnitPrice = OrderPage.getCurrencyFormatter().format(
+      this.unitPrice
+    );
+    const formattedTotalPrice = OrderPage.getCurrencyFormatter().format(
       this.getTotalPrice()
     );
     return `
@@ -243,18 +300,24 @@ class LineItemsCollection {
     );
   }
 
-  render(container, totalPriceElement, orderCountElement) {
+  render(container, totalPriceElement, orderCountElement, paymentTotalElement) {
     container.innerHTML = "";
     this.getList().forEach((item) => {
       const elements = item.toElements();
       elements.forEach((element) => container.appendChild(element));
     });
 
-    const formattedTotalPrice = OrderPage.getFormatter().format(
-      this.getTotalPrice()
-    );
-    totalPriceElement.innerText = formattedTotalPrice;
+    const totalPrice = this.getTotalPrice();
+
+    const currencyFormattedTotalPrice =
+      OrderPage.getCurrencyFormatter().format(totalPrice);
+    const numberFormattedTotalPrice =
+      OrderPage.getNumberFormatter().format(totalPrice);
+    totalPriceElement.innerText = currencyFormattedTotalPrice;
     orderCountElement.innerText = this.getItemCount();
+    paymentTotalElement.value = numberFormattedTotalPrice;
+
+    document.getElementById("payment-amount-payed").min = totalPrice;
   }
 }
 

@@ -69,48 +69,48 @@
           <h5 class="modal-title" id="paymentModalLabel">Payment</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <form id="payment-form">
+        <form id="payment-form">
+          <div class="modal-body">
             <div class="row">
               <div class="col-3 border-end me-2 d-flex flex-column justify-content-center">
                 <div class="form-check">
-                  <input type="radio" name="payment-type" value="cash" id="payment-cash" class="btn-check">
+                  <input type="radio" name="payment[payment-type]" value="cash" id="payment-cash" class="btn-check" required>
                   <label for="payment-cash" class="btn btn-outline-success">Cash</label>
                 </div>
                 <div class="form-check">
-                  <input type="radio" name="payment-type" value="card" id="payment-card" class="btn-check">
+                  <input type="radio" name="payment[payment-type]" value="card" id="payment-card" class="btn-check" required>
                   <label for="payment-card" class="btn btn-outline-success">Card</label>
                 </div>
               </div>
               <div class="col">
                 <div class="d-flex mb-3">
-                  <label class="col-sm-6 col-form-label">Payed</label>
+                  <label class="col-sm-6 col-form-label" for="payment-amount-payed]">Payed</label>
                   <div class="input-group">
                     <span class="input-group-text">R</span>
-                    <input type="text" name="" id="" class="form-control" placeholder="0.00">
+                    <input type="number" min="0" step="0.5" name="payment[amount_payed]" id="payment-amount-payed" class="form-control text-end" placeholder="0,00" required>
                   </div>
                 </div>
                 <div class="d-flex mb-3">
                   <label class="col-sm-6 col-form-label">Total</label>
                   <div class="input-group">
                     <span class="input-group-text">R</span>
-                    <input type="text" class="form-control" value="24.50" readonly>
+                    <input id="payment-total" type="text" class="form-control text-end" value="0,00" readonly>
                   </div>
                 </div>
                 <div class="d-flex mb-3">
                   <label class="col-sm-6 col-form-label">Change</label>
                   <div class="input-group">
                     <span class="input-group-text">R</span>
-                    <input type="text" class="form-control" value="5.50" readonly>
+                    <input id="payment-change" class="form-control text-end" value="0" readonly>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-lg btn-primary text-white">Pay</button>
-        </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-lg btn-primary text-white js-submit-order">Pay</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
