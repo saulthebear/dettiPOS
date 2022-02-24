@@ -1,0 +1,13 @@
+<% subcategories = categories_by_parent_id[category.id] %>
+
+<option value="<%= category.id %>"><%= category.name %></option>
+<% if subcategories.length > 0 %>
+  <optgroup label="<%= category.name %>" style="display: none">
+    <% subcategories.each do |subcategory| %>
+      <%= render 'category_option',
+        category: subcategory,
+        categories_by_parent_id: categories_by_parent_id
+      %>
+    <% end %>
+  </optgroup>
+<% end %>

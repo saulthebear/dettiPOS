@@ -1,22 +1,13 @@
-<div id="<%= dom_id product %>">
-  <p>
-    <strong>Name:</strong>
-    <%= product.name %>
-  </p>
-
-  <p>
-    <strong>Description:</strong>
-    <%= product.description %>
-  </p>
-
-  <p>
-    <strong>Price:</strong>
-    <%= product.price %>
-  </p>
-
-  <p>
-    <strong>Category:</strong>
-    <%= product.category_id %>
-  </p>
-
+<div class="card" style="max-width: 18rem;" id="<%= dom_id product %>">
+  <div class="card-body">
+    <h5 class="card-title"><%= product.name %></h5>
+    <p class="card-text"><%= product.description %></p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item"><strong>Price:</strong> <%= number_to_currency(product.price) %></li>
+    <li class="list-group-item"> <strong>Category:</strong> <%= product.category.name %></li>
+  </ul>
+  <div class="card-body">
+    <%= button_to "Remove", product, method: :delete, class: "btn btn-danger" %>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 <%= form_with(model: product) do |form| %>
   <% if product.errors.any? %>
-    <div style="color: red">
+    <div class="alert alert-danger">
       <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
 
       <ul>
@@ -11,27 +11,38 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.label :name, class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :price, class: "form-label" %>
+    <%= form.number_field :price,
+      in: 0.0..500.0,
+      step: 0.5,
+      class: "form-control"
+    %>
+  </div>
+  
+  <div class="mb-3">
+    <%= form.label :category_id %>
+    <select name="product[category_id]" id="category" class="form-select">
+      <% @categories_by_parent_id[nil].each do |category| %>
+        <%= render 'category_option',
+          category: category,
+          categories_by_parent_id: @categories_by_parent_id
+        %>
+      <% end %>
+    </select>
   </div>
 
   <div>
-    <%= form.label :description, style: "display: block" %>
-    <%= form.text_area :description %>
-  </div>
-
-  <div>
-    <%= form.label :price, style: "display: block" %>
-    <%= form.text_field :price %>
-  </div>
-
-  <div>
-    <%= form.label :category_id, style: "display: block" %>
-    <%= form.text_field :category_id %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit "Save Product", class: "btn btn-primary text-white" %>
   </div>
 <% end %>
