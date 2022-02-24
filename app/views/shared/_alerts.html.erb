@@ -1,19 +1,19 @@
-<% if flash[:errors] || flash[:alerts] %>
+<% if flash[:alert] || flash[:notice] %>
   <div class="sv-alerts-container position-absolute top-0 start-50">
 
-  <% if flash[:errors] %>
-    <% flash[:errors].each do |error| %>
+  <% if flash[:alert] %>
+    <% flash[:alert].each do |alert| %>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <div class="toast-body"><%= error %></div>
+        <div class="toast-body"><%= alert %></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <% end %>
   <% end %>
 
-  <% if flash[:alerts] %>
-    <% flash[:alerts].each do |alert| %>
+  <% if flash[:notice] %>
+    <% flash[:notice].each do |notice| %>
       <div class="alert alert-info alert-dismissible fade show" role="alert">
-        <div class="toast-body"><%= alert %></div>
+        <div class="toast-body"><%= notice %></div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
     <% end %>

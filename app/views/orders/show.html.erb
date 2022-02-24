@@ -1,0 +1,50 @@
+<h1>Order # <%= @order.id %> </h1>
+
+<div class="d-flex align-items-center">
+  <div class="me-5">
+    <div class="mb-2"><span class="fw-bold">Order placed:</span> <%= @order.created_at.strftime("%c") %></div>
+  
+    <div class="mb-2"><span class="fw-bold">Total price:</span> <%= number_to_currency(@order.total_price) %></div>
+  
+    <div class="mb-2">
+      <% if @payment %>
+        <div class="alert alert-success">
+          <div><span class="fw-bold">Payed on: </span><%= @payment.created_at.strftime("%c") %></div>
+          <div><span class="fw-bold">Payment method: </span><%= @payment.payment_type %></div>
+        </div>
+      <% else %>
+        <div class="alert alert-danger">Not yet payed!</div>
+      <% end %>
+    </div>
+  
+  </div>
+  
+  
+  <div class="flex-grow-1">
+    <table class="table table-striped table-sm caption-top">
+      <caption>Order Items</caption>
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Unit Price</th>
+          <th scope="col">Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @items.each do |item| %>
+          <%= render 'item', item: item %>
+        <% end %>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="table-active fw-bold"><%= number_to_currency(@order.total_price) %></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%= button_to "Delete order", @order, method: :delete, class: "btn btn-danger" %>
+<%= link_to 'All Orders', orders_url %>

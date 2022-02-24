@@ -20,16 +20,31 @@ class OrdersController < ApplicationController
     payment.amount = order.total_price
 
     if order.save && payment.save
-      flash[:alerts] = ['Order placed successfully!']
+      flash[:notice] = ['Order placed successfully!']
       redirect_to new_order_url
     else
-      flash[:errors] = order.errors.full_messages + payment.errors.full_messages
+      flash[:alert] = order.errors.full_messages + payment.errors.full_messages
       redirect_to new_order_url
     end
   end
 
   def index
     @orders = Order.order('created_at DESC').includes(:order_items, :products).all
+  end
+
+  def show
+    @order = Order.includes(:order_items, :products, :payment).find(params[:id])
+    @items = @order.order_items
+    @payment = @order.payment
+  end
+
+  def destroy
+    @order = Order.find(params[:id])
+    if @order.destroy
+      redirect_to orders_url, notice: ['Order was successfully destroyed.']
+    else
+      redirect_to orders_url, alert: ['Unable to delete order.']
+    end
   end
 
   private
