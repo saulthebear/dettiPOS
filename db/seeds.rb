@@ -12,41 +12,66 @@ Order.destroy_all
 Product.destroy_all
 Category.destroy_all
 
-parent_categories = Category.create([
-  { name: "Fresh" },
-  { name: "Frozen" }
-])
+regular = Category.create(name: 'Regular')
+specials = Category.create(name: 'Specials')
+extras = Category.create(name: 'Extras')
+wholesale = Category.create(name: 'Wholesale')
 
-subcategory = Category.create({ name: "Pies", parent: parent_categories[0] })
+pies = Category.create(name: 'Pies', parent: regular)
+drinks = Category.create(name: 'Drinks', parent: regular)
+cookies = Category.create(name: 'Cookies etc.', parent: regular)
 
-products = Product.create([
-  {name: 'Steak & Kidney Pie', price: 10.5, category: subcategory},
-  {name: 'Cheesy Mince Pie', price: 10.5, category: subcategory},
-  {name: 'Prime Steak Pie', price: 10.5, category: subcategory},
-  {name: 'Puff pastry', price: 21.99, category: parent_categories[1]}
-])
+# one = Product.create(name: '1 Pie', price: 18.5, category: specials)
+four = Product.create(name: '4 Pies', price: -8.0, category: specials)
+eight = Product.create(name: '8 Pies', price: -20.0, category: specials)
+burger_upgrade = Product.create(name: 'Burger Upgrade', price: 3.5, category: specials)
+two_grillers = Product.create(name: '2 Grillers', price: -2, category: specials)
+three_cocktails = Product.create(name: '3 Cocktails', price: -0.5, category: specials)
+
+oneone = Product.create(name: '1 Pie & 1 Can', price: -3.5, category: specials)
+
+p_pepper = Product.create(name: 'Pepper Steak', price: 18.5, category: pies)
+p_steak = Product.create(name: 'Steak', price: 18.5, category: pies)
+p_kidney = Product.create(name: 'Sausage Roll', price: 18.5, category: pies)
+p_sausage = Product.create(name: 'Spinach & Feta', price: 18.5, category: pies)
+p_spinach = Product.create(name: 'Cheese & Mince', price: 18.5, category: pies)
+p_cheese = Product.create(name: 'Chicken Mushroom', price: 18.5, category: pies)
+p_chicken = Product.create(name: 'Pepper Steak', price: 18.5, category: pies)
+
+burger = Product.create(name: 'Burger Pie', price: 22.0, category: pies)
+cocktail = Product.create(name: 'Cocktail', price: 3.5, category: pies)
+griller = Product.create(name: 'Griller', price: 6.00, category: pies)
+
+can = Product.create(name: '1 Can', price: 13.00, category: drinks)
+buddy = Product.create(name: 'Buddy', price: 15.00, category: drinks)
+buddy_upgrade = Product.create(name: 'Buddy Upgrade', price: 2.00, category: specials)
+water = Product.create(name: 'Water', price: 10.0, category: drinks)
+
+soup = Product.create(name: 'Soup', price: 15.0, category: cookies)
+choc = Product.create(name: 'Choc-Chip Cookies', price: 60.0, category: cookies)
+
+w_pie = Product.create(name: 'Wholesale Pie', price: 14.0, category: wholesale)
+w_burger = Product.create(name: 'Wholesale Burger', price: 16.5, category: wholesale)
+w_rusks = Product.create(name: 'Wholesale Rusks', price: 36.00, category: wholesale)
+
+bag = Product.create(name: 'Bag', price: 0.50, category: extras)
+
+puff = Product.create(name: 'Puff', price: 29.00, category: cookies)
 
 orders = Order.create([
-  {order_items:
-    OrderItem.create([
-      {product: products[0], unit_price: 10.5, quantity: 2},
-      {product: products[1], unit_price: 10.5, quantity: 3}
-    ])
-  },
-  {order_items:
-    OrderItem.create([
-      {product: products[2], unit_price: 10.5, quantity: 2},
-      {product: products[3], unit_price: 21.99, quantity: 1}
-    ])
-  },
-  {order_items:
-    OrderItem.create([
-      {product: products[0], unit_price: 10.5, quantity: 1}
-    ])
-  }
-])
+                        { order_items:
+                          OrderItem.create([
+                                             { product: p_steak, quantity: 2 },
+                                             { product: griller, quantity: 2 },
+                                             { product: two_grillers, quantity: 1 }
+                                           ]) },
+                        { order_items:
+                          OrderItem.create([
+                                             { product: w_pie, quantity: 50 },
+                                             { product: w_burger, quantity: 10 }
+                                           ]) }
+                      ])
 
 payments = Payment.create!([
-  {order: orders[0], amount: orders[0].total_price},
-  {order: orders[1], amount: orders[1].total_price, payment_type: 1}
-])
+                             { order: orders[0], amount: orders[0].total_price }
+                           ])
