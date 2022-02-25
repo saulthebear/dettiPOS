@@ -10,6 +10,7 @@
 #
 class Category < ApplicationRecord
   validates :name, presence: true, uniqueness: true
+  after_initialize :handle_zero_parent
 
   belongs_to :parent,
              class_name: :Category,
@@ -95,5 +96,11 @@ class Category < ApplicationRecord
     end
 
     ancestor_ids
+  end
+
+  private
+
+  def handle_zero_parent
+    self.parent_id = nil if parent_id == 0
   end
 end

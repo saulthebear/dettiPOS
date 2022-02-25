@@ -11,6 +11,7 @@
     <div id="category-accordion-<%= category.id %>" class="accorion-collapse collapse" aria-labelledby="category-heading-<%= category.id %>" data-bs-parent="subcategory-accordion-<%= category.parent_id %>">
       
       <div class="accorion-body p-3">
+        <%= link_to 'Edit category', edit_category_path(category), class: "btn btn-outline-primary btn-sm mb-1" %>
         <% if products %>
           <div class="row row-cols-2">
             <% products.each do |product| %>

@@ -1,0 +1,10 @@
+<h1>Create a new product category</h1>
+<%= render 'form',
+  category: @category,
+  categories_by_parent_id: @categories_by_parent_id
+%>
+
+
+<div>
+  <%= link_to "Back to products", products_path %>
+</div>

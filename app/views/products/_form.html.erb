@@ -39,7 +39,7 @@
     <%= form.label :category_id %>
     <select name="product[category_id]" id="category" class="form-select">
       <% @categories_by_parent_id[nil].each do |category| %>
-        <%= render 'category_option',
+        <%= render 'shared/category_option',
           category: category,
           categories_by_parent_id: @categories_by_parent_id
         %>

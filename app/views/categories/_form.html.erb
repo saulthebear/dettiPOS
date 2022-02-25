@@ -1,0 +1,36 @@
+<%= form_with(model: category) do |f| %>
+  <% if category.errors.any? %>
+    <div class="alert alert-danger">
+      <h2><%= pluralize(product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+        <% product.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <label for="category-name" class="form-label">Category name:</label>
+    <%= f.text_field :name, class: "form-control", required: true%>
+  </div>
+
+  <div class="mb-3">
+    <label for="category-parent" class="form-label">Parent category:</label>
+    <select name="category[parent_id]" id="category-parent" class="form-select">
+      <option value="0" selected>None</option>
+      <% categories_by_parent_id[nil].each do |category| %>
+        <%= render 'shared/category_option',
+          category: category,
+          categories_by_parent_id: categories_by_parent_id
+        %>
+      <% end %>
+    </select>
+  </div>
+
+  <div>
+    <%= f.submit "Save Category", class: "btn btn-primary text-white" %>
+  </div>
+  
+<% end %>

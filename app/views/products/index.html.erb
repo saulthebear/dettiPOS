@@ -1,12 +1,9 @@
-<% if notice %>
-  <div class="alert alert-success mt-3">
-    <%= notice %>
-  </div>
-<% end %>
-
 <h1>Products</h1>
 
-<%= link_to "New product", new_product_path, class: "btn btn-primary text-white mb-3" %>
+<div class="btn-group">
+  <%= link_to "New product", new_product_path, class: "btn btn-outline-primary mb-3" %>
+  <%= link_to "New Category", new_category_path, class: "btn btn-outline-primary mb-3" %>
+</div>
 
 <% root_categories = @categories_by_parent_id[nil] %>
 
