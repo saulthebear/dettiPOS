@@ -1,9 +1,34 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary col-7">
+<nav class="navbar navbar-dark bg-primary col-7">
   <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#main-nav-collapse"
+      aria-controls="main-nav-collapse"
+      aria-expaned="false"
+      aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
     <a href="/" class="navbar-brand">
       <%= image_tag 'detti-logo-white', alt: 'Detti Logo' %>
     </a>
+
     <button class="btn btn-danger"><i class="bi bi-box-arrow-right"></i> Logout</button>
+
+    <div class="collapse navbar-collapse" id="main-nav-collapse">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to "New Order", new_order_url, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "All Orders", orders_url, class: "nav-link" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "All Products", products_url, class: "nav-link" %>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
