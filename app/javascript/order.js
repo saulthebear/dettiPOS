@@ -3,6 +3,7 @@ class OrderPage {
     return new Intl.NumberFormat("en-ZA", {
       style: "currency",
       currency: "ZAR",
+      currencySign: "accounting",
     });
   }
 
@@ -93,7 +94,7 @@ class OrderPage {
     const name = product.dataset.productName;
     const price = parseFloat(product.dataset.productPrice);
 
-    const item = new LineItem(id, name, 1, price);
+    const item = new LineItem(id, name, 1, price, orderPage.lineItems);
     orderPage.lineItems.addItem(item);
     orderPage.render();
   }
@@ -168,12 +169,21 @@ class OrderPage {
 }
 
 class LineItem {
-  constructor(id, name, quantity, unitPrice) {
+  constructor(id, name, quantity, unitPrice, container = null) {
     this.id = id;
     this.name = name;
     this.quantity = quantity;
     this.unitPrice = unitPrice;
     this.notes = "";
+    this.container = container;
+  }
+
+  setQty(n) {
+    if (typeof n === "number" && n > 0) {
+      this.quantity = n;
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -194,6 +204,7 @@ class LineItem {
   subtract(n) {
     if (n >= this.quantity) {
       this.quantity = 0;
+      if (this.container) this.container.removeItem(this.id);
       return;
     }
 
@@ -229,23 +240,54 @@ class LineItem {
       this.getTotalPrice()
     );
     return `
-    <div class="row sv-line-item pt-3">
-      <div class="col-6">
-        <span class="d-block fw-bold">${this.name}</span>
-        <span class="d-block fw-light text-muted">${this.notes}</span>
+    <div class="row sv-line-item pt-3" data-id="${this.id}">
+      
+      <button class="sv-line-item-btn"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapse${this.id}"
+        aria-expanded="false"
+        aria-controls="collapse${this.id}"
+      >
+        <div class="col-6">
+          <span class="d-block fw-bold">${this.name}</span>
+          <span class="d-block fw-light text-muted">${this.notes}</span>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <span class="sv-line-item__quantity">${this.quantity}</span>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <span class="sv-line-item__unit-price">${formattedUnitPrice}</span>
+        </div>
+        <div class="col-2 d-flex justify-content-center">
+          <span class="fw-bold">${formattedTotalPrice}</span>
+        </div>
+      </button>
+
+      <div class="collapse" id="collapse${this.id}">
+          <div class="mt-2">
+            <form class="row">
+              <div class="col-4"></div>
+              <div class="col-6">
+                <div class="row d-flex justify-content-center">
+                  <div class="col-4 d-flex justify-content-end p-0">
+                    <button class="btn btn-primary text-white sv-qty-btn js-qty-btn" data-action="decrement">-</button>
+                  </div>
+                  <div class="col d-flex justify-content-center p-0 mx-1">
+                    <input type="number" class="form-control text-center sv-qty-input js-qty-input" min=1 step=1>
+                  </div>
+                  <div class="col-4 d-flex justify-content-start p-0">
+                    <button class="btn btn-primary text-white sv-qty-btn js-qty-btn" data-action="increment">+</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-2 d-flex justify-content-center">
+                <button class="btn btn-danger sv-qty-btn js-item-delete-btn"><i class="bi bi-x"></i></button>
+              </div>
+            </form>
+          </div>
       </div>
 
-      <div class="col-2">
-        <span class="sv-line-item__quantity">${this.quantity}</span>
-      </div>
-
-      <div class="col-2">
-        <span class="sv-line-item__unit-price">${formattedUnitPrice}</span> 
-      </div>
-
-      <div class="col-2">
-        <span class="fw-bold">${formattedTotalPrice}</span> 
-      </div>
     </div>`.trim();
   }
 
@@ -300,6 +342,12 @@ class LineItemsCollection {
     );
   }
 
+  removeItem(itemId) {
+    const deleted = this.lineItems.delete(itemId);
+    orderPage.render();
+    return deleted;
+  }
+
   render(container, totalPriceElement, orderCountElement, paymentTotalElement) {
     container.innerHTML = "";
     this.getList().forEach((item) => {
@@ -318,6 +366,16 @@ class LineItemsCollection {
     paymentTotalElement.value = numberFormattedTotalPrice;
 
     document.getElementById("payment-amount-payed").min = totalPrice;
+
+    const qtyBtns = document.querySelectorAll(".js-qty-btn");
+    const deleteBtns = document.querySelectorAll(".js-item-delete-btn");
+    const qtyInput = document.querySelectorAll(".js-qty-input");
+
+    orderPage.addClickListener(qtyBtns, handleQtyChange);
+    orderPage.addClickListener(deleteBtns, handleDelete);
+    qtyInput.forEach((input) => {
+      input.addEventListener("focusout", handleQtyTextChange);
+    });
   }
 }
 
@@ -473,6 +531,60 @@ class Products {
     });
   }
 }
+
+function handleDelete(e) {
+  e.preventDefault();
+
+  const btn = e.currentTarget;
+  const lineItemElement = btn.closest(".sv-line-item");
+  const itemId = parseInt(lineItemElement.dataset.id);
+
+  orderPage.lineItems.removeItem(itemId);
+  orderPage.render();
+}
+
+function handleQtyTextChange(e) {
+  const input = e.currentTarget;
+  const lineItemElement = input.closest(".sv-line-item");
+  const qtyDisplayElement = lineItemElement.querySelector(
+    ".sv-line-item__quantity"
+  );
+  const itemId = parseInt(lineItemElement.dataset.id);
+  const lineItemObj = orderPage.lineItems.lineItems.get(itemId);
+
+  const newValue = input.value;
+  lineItemObj.setQty(parseInt(newValue));
+  orderPage.render();
+}
+
+function handleQtyChange(e) {
+  e.preventDefault();
+  const btn = e.currentTarget;
+  const lineItemElement = btn.closest(".sv-line-item");
+  const qtyDisplayElement = lineItemElement.querySelector(
+    ".sv-line-item__quantity"
+  );
+  const inputElement = lineItemElement.querySelector(".sv-qty-input");
+  const itemId = parseInt(lineItemElement.dataset.id);
+  const lineItemObj = orderPage.lineItems.lineItems.get(itemId);
+
+  let value = parseInt(qtyDisplayElement.innerHTML);
+
+  const action = btn.dataset.action;
+
+  if (action === "increment") {
+    value += 1;
+    lineItemObj.addOne();
+  } else {
+    value -= 1;
+    lineItemObj.subtractOne();
+  }
+
+  inputElement.value = value;
+  qtyDisplayElement.innerHTML = value;
+}
+
+function handleIncrement(e) {}
 
 const orderPage = new OrderPage();
 orderPage.initialize();
