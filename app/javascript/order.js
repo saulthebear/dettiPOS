@@ -532,59 +532,56 @@ class Products {
   }
 }
 
+function qtyChangeEvent(e) {
+  const obj = {};
+
+  obj.trigger = e.currentTarget;
+  obj.lineItemElement = obj.trigger.closest(".sv-line-item");
+  obj.qtyDisplayElement = obj.lineItemElement.querySelector(
+    ".sv-line-item__quantity"
+  );
+  obj.itemId = parseInt(obj.lineItemElement.dataset.id);
+  obj.itemObj = orderPage.lineItems.lineItems.get(obj.itemId);
+  obj.inputElement = obj.lineItemElement.querySelector(".sv-qty-input");
+  obj.currentDisplayValue = parseInt(obj.qtyDisplayElement.innerHTML);
+
+  return obj;
+}
+
 function handleDelete(e) {
   e.preventDefault();
 
-  const btn = e.currentTarget;
-  const lineItemElement = btn.closest(".sv-line-item");
-  const itemId = parseInt(lineItemElement.dataset.id);
+  const vals = qtyChangeEvent(e);
 
-  orderPage.lineItems.removeItem(itemId);
+  orderPage.lineItems.removeItem(vals.itemId);
   orderPage.render();
 }
 
 function handleQtyTextChange(e) {
-  const input = e.currentTarget;
-  const lineItemElement = input.closest(".sv-line-item");
-  const qtyDisplayElement = lineItemElement.querySelector(
-    ".sv-line-item__quantity"
-  );
-  const itemId = parseInt(lineItemElement.dataset.id);
-  const lineItemObj = orderPage.lineItems.lineItems.get(itemId);
-
-  const newValue = input.value;
-  lineItemObj.setQty(parseInt(newValue));
+  const vals = qtyChangeEvent(e);
+  const newValue = vals.inputElement.value;
+  vals.itemObj.setQty(parseInt(newValue));
   orderPage.render();
 }
 
 function handleQtyChange(e) {
   e.preventDefault();
-  const btn = e.currentTarget;
-  const lineItemElement = btn.closest(".sv-line-item");
-  const qtyDisplayElement = lineItemElement.querySelector(
-    ".sv-line-item__quantity"
-  );
-  const inputElement = lineItemElement.querySelector(".sv-qty-input");
-  const itemId = parseInt(lineItemElement.dataset.id);
-  const lineItemObj = orderPage.lineItems.lineItems.get(itemId);
 
-  let value = parseInt(qtyDisplayElement.innerHTML);
-
-  const action = btn.dataset.action;
+  const vals = qtyChangeEvent(e);
+  let value = vals.currentDisplayValue;
+  const action = vals.trigger.dataset.action;
 
   if (action === "increment") {
     value += 1;
-    lineItemObj.addOne();
+    vals.itemObj.addOne();
   } else {
     value -= 1;
-    lineItemObj.subtractOne();
+    vals.itemObj.subtractOne();
   }
 
-  inputElement.value = value;
-  qtyDisplayElement.innerHTML = value;
+  vals.inputElement.value = value;
+  vals.qtyDisplayElement.innerHTML = value;
 }
-
-function handleIncrement(e) {}
 
 const orderPage = new OrderPage();
 orderPage.initialize();
