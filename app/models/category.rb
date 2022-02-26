@@ -28,6 +28,9 @@ class Category < ApplicationRecord
            inverse_of: :category,
            dependent: :destroy
 
+  # Returns a hash, with parent_id => category instance
+  # This is useful for getting all categories at once
+  # and then displaying them in their proper nested structure
   def self.by_parent_id
     categories = all
 
@@ -39,10 +42,14 @@ class Category < ApplicationRecord
     hash
   end
 
+  # Hash where category id => category instance
+  # Used to get all categories with one DB call and still be able to find
+  # a particular category by its id
   def self.category_map
     Category.all.map { |category| [category.id, category] }.to_h
   end
 
+  # Returns a hash where category object => array of ancestor ids
   def self.ancestor_map
     category_by_id = category_map
 
@@ -55,23 +62,14 @@ class Category < ApplicationRecord
     hash
   end
 
+  # Returns a 2D array, where each row is a tuple of the category object and an
+  # array of all that category's ancestor ids
   def self.with_ancestors
     category_map = self.category_map
 
     all.map do |category|
       [category, category.all_ancestor_ids(category_map)]
     end
-  end
-
-  def self.by_levels
-    all_levels = Hash.new { |h, k| h[k] = [] }
-
-    ancestor_map.each do |category, ancestors|
-      number_of_levels = ancestors.length
-      all_levels[number_of_levels] << category
-    end
-
-    all_levels
   end
 
   def self.with_ancestors_by_levels
