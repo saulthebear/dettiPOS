@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  before_action :require_user
+  before_action :require_admin, except: %i[create new]
   def new
     @categories = Category.with_ancestors_by_levels
     @products_with_ancestors = Product.with_ancestors

@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
   helper_method :current_user,
                 :login!,
-                :logout!
+                :logout!,
+                :require_user
 
   def current_user
     token = session[:session_token]
@@ -21,5 +22,24 @@ class ApplicationController < ActionController::Base
 
     @current_user.reset_session_token!
     session[:session_token] = nil
+  end
+
+  def require_user
+    if current_user
+      unless current_user.approved
+        flash[:alert] = ['Your account has not been approved yet. Contact your manager.']
+        logout!
+        redirect_to new_session_url
+      end
+    else
+      redirect_to new_session_url
+    end
+  end
+
+  def require_admin
+    unless current_user&.role == 'Admin'
+      flash[:alert] = ['Admin access needed!']
+      redirect_to :root
+    end
   end
 end
