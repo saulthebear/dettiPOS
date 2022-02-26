@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
                 :logout!,
                 :require_user
 
+  # Returns the currently signed in user
+  # or nil if no user is signed in
   def current_user
     token = session[:session_token]
     return nil unless token
@@ -24,6 +26,8 @@ class ApplicationController < ActionController::Base
     session[:session_token] = nil
   end
 
+  # Redirects unless an approved user is signed in
+  # New users need to be approved by an admin
   def require_user
     if current_user
       unless current_user.approved
@@ -32,10 +36,12 @@ class ApplicationController < ActionController::Base
         redirect_to new_session_url
       end
     else
+      flash[:alert] = ['You must be signed in to access this resource.']
       redirect_to new_session_url
     end
   end
 
+  # Redirects unless the current user is an admin
   def require_admin
     unless current_user&.role == 'Admin'
       flash[:alert] = ['Admin access needed!']
