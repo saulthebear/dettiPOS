@@ -1,0 +1,14 @@
+<%= form_with url: session_url do |form| %>
+  <div class="mb-3">
+    <%= form.label "Username:", class: "form-label" %>
+    <%= form.text_field "session[username]", class: "form-control", autocomplete: "username" %>
+  </div>
+  <div class="mb-3">
+    <%= form.label "Password:", class: "form-label" %>
+    <%= form.password_field "session[password]", class: "form-control", autocomplete: "current_password" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.submit "Login", class: "btn btn-primary btn-lg text-white" %>
+  </div>
+<% end %>
