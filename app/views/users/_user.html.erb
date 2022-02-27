@@ -1,26 +1,72 @@
-<div class="card me-3" style="width: 18rem;">
+<div class="card me-3 mb-3" style="width: 18rem;">
   <div class="card-body">
     <h5 class="card-title">
       <%= user.name %> (<%= user.username %>)
       <% unless user.approved%>
         <span class="badge bg-danger">New</span>
       <% end %>
+      <% if user == current_user %>
+        <span class="badge bg-success">You</span>
+      <% end %>
     </h5>
     <h6 class="card-subtitle mb-2 text-muted"><%= user.role %></h6>
-    <p class="card-text">Approved: <%= user.approved %></p>
+    <p class="card-text">
+      <% if user.approved %>
+        Approved
+      <% else %>
+        <span class="text-danger">Not yet approved</span>
+      <% end %>
+    </p>
 
-    <% if user.approved %>
-      <a href="#" class="btn btn-success text-white m-1">Revoke Access</a>
-    <% else %>
-      <a href="#" class="btn btn-success text-white m-1">Approve</a>
-    <% end %>
+    <% unless user == current_user %>
+      <% if user.approved %>
+        <%= button_to 'Revoke Access',
+          user_path(user),
+          method: :patch,
+          params: {
+            "user[approved]": false
+          },
+          class: "btn btn-danger text-white m-1"
+        %>
+      <% else %>
+        <%= button_to 'Approve',
+          user_path(user),
+          method: :patch,
+          params: {
+            "user[approved]": true
+          },
+          class: "btn btn-success text-white m-1"
+        %>
+      <% end %>
 
-    <% if user.role == "Cashier" %>
-      <a href="#" class="btn btn-danger m-1">Make Admin</a>
-    <% else %>
-      <a href="#" class="btn btn-danger m-1">Revoke Admin Role</a>
+      <% if user.role == "Cashier" %>
+        <%= button_to 'Make Admin',
+          user_path(user),
+          method: :patch,
+          params: {
+            "user[role]": "Admin"
+          },
+          class: "btn btn-success text-white m-1"
+        %>
+      <% else %>
+        <%= button_to 'Revoke Admin Role',
+          user_path(user),
+          method: :patch,
+          params: {
+            "user[role]": "Cashier"
+          },
+          class: "btn btn-danger text-white m-1"
+        %>
+      <% end %>
+
+      <% unless user.approved %>
+        <%= button_to 'Delete Account',
+          user_path(user),
+          method: :delete,
+          class: "btn btn-danger text-white m-1"
+        %>
+      <% end %>
     <% end %>
-      
     
   </div>
 </div>

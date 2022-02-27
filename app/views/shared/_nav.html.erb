@@ -30,12 +30,17 @@
         <li class="nav-item">
           <%= link_to "New Order", new_order_url, class: "nav-link" %>
         </li>
-        <li class="nav-item">
-          <%= link_to "All Orders", orders_url, class: "nav-link" %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "All Products", products_url, class: "nav-link" %>
-        </li>
+        <% if current_user&.admin? %>
+           <li class="nav-item">
+            <%= link_to "All Orders", orders_url, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "All Products", products_url, class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Users", users_url, class: "nav-link" %>
+          </li>
+        <% end %>
       </ul>
     </div>
   </div>
