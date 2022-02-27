@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'order', defer: "defer" %>
 
 <div class="row h-100">
-  <div class="col-7 bg-dark text-light p-0">
+  <div class="col-7 bg-dark text-light p-0 sv-products-panel">
     <div class="container pt-4">
       <% @categories.each do |level, categories| %>
         <%= render 'category_row',
