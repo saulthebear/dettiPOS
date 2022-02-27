@@ -1,0 +1,26 @@
+<div class="card me-3" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">
+      <%= user.name %> (<%= user.username %>)
+      <% unless user.approved%>
+        <span class="badge bg-danger">New</span>
+      <% end %>
+    </h5>
+    <h6 class="card-subtitle mb-2 text-muted"><%= user.role %></h6>
+    <p class="card-text">Approved: <%= user.approved %></p>
+
+    <% if user.approved %>
+      <a href="#" class="btn btn-success text-white m-1">Revoke Access</a>
+    <% else %>
+      <a href="#" class="btn btn-success text-white m-1">Approve</a>
+    <% end %>
+
+    <% if user.role == "Cashier" %>
+      <a href="#" class="btn btn-danger m-1">Make Admin</a>
+    <% else %>
+      <a href="#" class="btn btn-danger m-1">Revoke Admin Role</a>
+    <% end %>
+      
+    
+  </div>
+</div>
