@@ -17,8 +17,15 @@
 
 @import "bootstrap";
 
+.sv-products-panel {
+  max-height: 95vh;
+  overflow-y: scroll;
+}
+
 .sv-order-panel {
   min-height: 92vh;
+  max-height: 95vh;
+  overflow-y: scroll;
   background-color: $gray-100;
 }
 
