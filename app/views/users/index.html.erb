@@ -1,0 +1,7 @@
+<h1>Users</h1>
+
+<div class="d-flex flex-wrap">
+  <% @users.each do |user| %>
+    <%= render 'user', user: user %>
+  <% end %>
+</div>
