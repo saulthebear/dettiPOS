@@ -583,5 +583,5 @@ function handleQtyChange(e) {
   vals.qtyDisplayElement.innerHTML = value;
 }
 
-const orderPage = new OrderPage();
+orderPage = new OrderPage();
 orderPage.initialize();
