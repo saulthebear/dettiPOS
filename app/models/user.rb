@@ -54,6 +54,10 @@ class User < ApplicationRecord
     session_token
   end
 
+  def admin?
+    role == 'Admin'
+  end
+
   private
 
   def ensure_session_token

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_admin, except: %i[new create]
+  before_action :set_user, only: %i[show update destroy]
 
   def new
     @user = User.new
@@ -14,17 +15,38 @@ class UsersController < ApplicationController
     end
   end
 
-  def show
-    @user = User.find(params[:id])
+  def index
+    @users = User.all.order(:id)
   end
 
-  def index
-    @users = User.all
+  def update
+    if @user.update(admin_user_params)
+      redirect_to users_url, notice: ['Account updated successfully']
+    else
+      redirect_to users_url, status: :unprocessable_entity, alert: @user.errors.full_messages
+    end
+  end
+
+  def destroy
+    if @user.destroy
+      redirect_to users_url, notice: ['Account removed successfully']
+    else
+      redirect_to users_url, status: :unprocessable_entity, alert: @user.errors.full_messages
+    end
   end
 
   private
 
   def user_params
     params.require(:user).permit(:name, :username, :password)
+  end
+
+  # Params only an admin is allowed to edit
+  def admin_user_params
+    params.require(:user).permit(:name, :username, :role, :approved)
+  end
+
+  def set_user
+    @user = User.find(params[:id])
   end
 end

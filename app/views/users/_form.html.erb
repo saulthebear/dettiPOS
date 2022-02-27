@@ -1,25 +1,15 @@
-<% if user.persisted?
-    action = user_url(user)
-    method = "patch"
-  else
-    action = users_url
-    method = "post"
-  end
-%>
-
-<%= form_with url: action, method: method do |form| %>
-
+<%= form_with model: user do |form| %>
   <div class="mb-3">
     <%= form.label "Display name:", class: "form-label" %>
-    <%= form.text_field "user[name]", class: "form-control" %>
+    <%= form.text_field "name", value: user.name, class: "form-control" %>
   </div>
   <div class="mb-3">
     <%= form.label "Username:", class: "form-label" %>
-    <%= form.text_field "user[username]", class: "form-control", autocomplete: "username" %>
+    <%= form.text_field "username", value: user.username, class: "form-control", autocomplete: "username" %>
   </div>
   <div class="mb-3">
     <%= form.label "Password:", class: "form-label" %>
-    <%= form.password_field "user[password]", class: "form-control", autocomplete: "current_password" %>
+    <%= form.password_field "password", class: "form-control", autocomplete: "current_password" %>
   </div>
 
   <div class="mb-3">

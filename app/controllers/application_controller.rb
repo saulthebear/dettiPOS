@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
 
   # Redirects unless the current user is an admin
   def require_admin
-    unless current_user&.role == 'Admin'
+    unless current_user&.admin?
       flash[:alert] = ['Admin access needed!']
       redirect_to :root
     end
