@@ -2,6 +2,10 @@
 
 This is the start of a point of sale system for a small bakery in South Africa. Note that this app is still in early development and will undergo many changes. Feel free to poke around as you follow my progress building.
 
+* Take a look at the application on Heroku: [DettiPOS](https://detti-pos.herokuapp.com/) & sign in with the demo account:
+  * **username:** demo
+  * **password:** demo123
+
 ## ⚙️ Technology
 This is a Ruby on Rails app with a Postgresql database. The front-end is currently a mix of ERB and vanilla Javascript, with Bootstrap as a design framework. SCSS is used as a CSS preprocessor.
 
