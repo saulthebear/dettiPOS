@@ -19,13 +19,12 @@ I plan to transition the back-end to a JSON API only with a React app as the fro
 * On the new order page, products can be filtered by category.
 * On the products index page, all products can be seen under their category headings
 * Products can be created and edited
+* User accounts
+  * Two types: Admin and Cashier
+  * Cashiers are only be able to access the new orders page
+  * Cashier accounts need to be approved by an admin before they can be used
 
 ### 🔮 Coming features
-* User accounts / Security
-  * Two types: Admin and Cashier
-  * Cashiers will only be able to access the new orders page
-  * Cashier accounts need to be approved by an admin before they can be used
-  * Prevent using the app from unfamiliar / unapproved locations
 * Overview of orders placed, filtered by time period
 * Cash up: Totaling all sales at the end of the day
   * organized by cash purchases or credit purchases
@@ -33,7 +32,10 @@ I plan to transition the back-end to a JSON API only with a React app as the fro
 * Future orders
   * orders placed by phone that can't be paid immediately
   * orders for a future date. Can be paid when placed or when the order has been completed.
+* Security
+  * Prevent using the app from unfamiliar / unapproved locations
 
 ## ⚠️ Known issues
 * Products cannot be deleted if they are being referenced in an order
   * This will be solved by setting products as *inactive* when removed from the menu.
+* The new order page may need to be refreshed if the category buttons are not working.
